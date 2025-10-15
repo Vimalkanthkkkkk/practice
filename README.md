@@ -8,6 +8,5 @@
   empty drop zones, and real-time validation for CSV and JSON data input formats
 
 - Engineered a sequential pipeline execution engine processing multi-step data transformations 
-  using TypeScript, component lifecycle hooks (ngAfterViewInit), ViewChild/QueryList decorators 
-  for DOM manipulation, and custom business logic for filtering, finding extremes, and numerical 
+  using TypeScript, component lifecycle hooks (ngAfterViewInit) custom logic for filtering, finding extremes, and numerical 
   aggregations with comprehensive error handling
