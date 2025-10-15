@@ -1,0 +1,139 @@
+<div class="container">
+  <h2>Workflow Automation Builder</h2>
+  <div class="builder-layout">
+    <div class="operations-panel">
+      <h3>Available Operations</h3>
+      <div 
+        cdkDropList
+        #operationsList="cdkDropList"
+        [cdkDropListData]="availableOperations"
+        [cdkDropListConnectedTo]="[workflowList]"
+        class="operations-list"
+        (cdkDropListDropped)="drop($event)">
+        <div 
+          *ngFor="let operation of availableOperations"
+          cdkDrag
+          class="operation-item">
+          {{ operation.label }}
+        </div>
+      </div>
+    </div>
+
+    <div class="workflow-panel">
+      <h3>Workflow Pipeline</h3>
+      <div 
+        cdkDropList
+        #workflowList="cdkDropList"
+        [cdkDropListData]="workflowSteps"
+        [cdkDropListConnectedTo]="[operationsList]"
+        class="workflow-list"
+        (cdkDropListDropped)="drop($event)">
+        
+        <div 
+          *ngFor="let step of workflowSteps; let i = index"
+          class="workflowstep">
+          
+          <div *ngIf="step.type === 'empty'" 
+                cdkDrag
+                class="empty-box">
+            Drop operation here
+          </div>
+
+          <div *ngIf="step.type !== 'empty'" class="stepcard">
+            <div class="step-header" (click)="toggleConfig(i)">
+              <span>{{ step.label }}</span>
+              <button class="btnicon" (click)="removeStep(i, $event)">✕</button>
+            </div>
+
+            <div *ngIf="activeStepIndex === i" class="configpanel">
+              
+              <div *ngIf="step.type === 'data'">
+                <label>Enter Data (comma-separated or JSON array):</label>
+                <textarea 
+                  [(ngModel)]="dataInput"
+                  placeholder=" 1,2,3,4,5 0r [{'name' : 'Person1' , 'age' : '40'} , {'name' : 'Person2' , 'age' : '60'}]"
+                  rows="4"></textarea>
+                <button (click)="saveData(i)">Save Data</button>
+                
+                <div *ngIf="step.data" class="datapreview">
+                  <strong>Data:</strong> {{ step.data | json }}
+                </div>
+              </div>
+
+              <div *ngIf="step.type === 'filter'">
+                <label>Field:</label>
+                <input [(ngModel)]="filterConfig.field" placeholder="field name">
+                
+                <label>Operator:</label>
+                <select [(ngModel)]="filterConfig.operator">
+                  <option value="greater">Greater Than</option>
+                  <option value="less">Less Than</option>
+                  <option value="equal">Equal To</option>
+                  <option value="notEqual">Not Equal To</option>
+                </select>
+                
+                <label>Value:</label>
+                <input [(ngModel)]="filterConfig.value" type="text" placeholder="value">
+                
+                <button (click)="saveFilter(i)">Save Filter</button>
+                
+                <div *ngIf="step.config" class="config-preview">
+                  <strong>Config:</strong> {{ step.config | json }}
+                </div>
+              </div>
+
+              <div *ngIf="step.type === 'max'">
+                <label>Field to find maximum:</label>
+                <input [(ngModel)]="aggregateConfig.field" placeholder="field name">
+                <button (click)="saveAggregate(i)">Save</button>
+                
+                <div *ngIf="step.config" class="config-preview">
+                  <strong>Config:</strong> {{ step.config | json }}
+                </div>
+              </div>
+
+              <div *ngIf="step.type === 'min'">
+                <label>Field to find minimum:</label>
+                <input [(ngModel)]="aggregateConfig.field" placeholder="field name">
+                <button (click)="saveAggregate(i)">Save</button>
+                
+                <div *ngIf="step.config" class="config-preview">
+                  <strong>Config:</strong> {{ step.config | json }}
+                </div>
+              </div>
+
+              <div *ngIf="step.type === 'count'">
+                <p>Counts total items in the dataset</p>
+                <div *ngIf="step.config" class="config-preview">
+                  <strong>Ready to count</strong>
+                </div>
+              </div>
+
+              <div *ngIf="step.type === 'sum'">
+                <label>Field to sum:</label>
+                <input [(ngModel)]="aggregateConfig.field" placeholder="field name">
+                <button (click)="saveAggregate(i)">Save</button>
+                
+                <div *ngIf="step.config" class="config-preview">
+                  <strong>Config:</strong> {{ step.config | json }}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="executesection">
+        <button (click)="executeWorkflow()" class="btnexecute">
+          Execute Workflow
+        </button>
+      </div>
+
+      <div *ngIf="workflowResult" class="resultpanel">
+        <h4>Result:</h4>
+        <pre>{{ workflowResult | json }}</pre>
+      </div>
+    </div>
+  </div>
+</div>
