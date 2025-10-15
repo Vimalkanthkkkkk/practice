@@ -1,3 +1,4 @@
+<img width="1920" height="1080" alt="Screenshot 2025-10-15 171510" src="https://github.com/user-attachments/assets/f41e82c9-03f5-49e9-a58d-61b9604bd302" />
 - Developed an interactive Workflow Automation Builder using Angular 17+ Standalone Components 
   and Angular CDK Drag & Drop (CdkDropList, CdkDrag, transferArrayItem), enabling visual 
   construction of data processing pipelines with 6+ configurable operations including filtering, 
